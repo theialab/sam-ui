@@ -2,7 +2,7 @@ NOTICE
 ------
 
 This product includes software developed by Meta Platforms, Inc. 
-(https://github.com/facebookresearch/segment-anything-2).
+(https://github.com/facebookresearch/sam2).
 
 The Segment Anything Model v2 (SAM v2) is licensed under the Apache License, Version 2.0.
 
