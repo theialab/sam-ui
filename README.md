@@ -1,6 +1,21 @@
-# Manual labelling and propagation with SAM-2
+# Manual labelling with SAM-2
 
-## Environment creation
+## Terms of usage
+
+If you use this tool, kindly cite the paper [3D Gaussian Flats: Hybrid 2D/3D Photometric Scene Reconstruction](https://github.com/theialab/3dgs-flats)
+
+<section class="section" id="BibTeX">
+  <div class="container is-max-desktop content">
+    <h2 class="title">BibTeX</h2>
+    <pre><code> TBA
+   </code></pre>
+  </div>
+</section>
+
+
+## Usage
+
+### Environment creation
 ```
 conda create -n sam2 python=3.12
 conda activate sam2
@@ -10,7 +25,7 @@ pip install huggingface-hub
 pip install -e .
 ```
 
-## Tracking GUI
+### Tracking GUI
 ```
 python scripts/tracking_gui.py --frames-path %path/to/frames% 
 ```
@@ -20,7 +35,7 @@ Availiable arguments
 - `--ui-scale` -- Scale factor for the UI (in case the window is too big or small)
 - `--clear-output` -- If provided, the script will clear the output directory before starting"
 
-## GUI usage
+### GUI usage
 
 - Arrow Down ⬇️ → Select previous object
 - Arrow Up ⬆️ → Select next object
@@ -31,7 +46,7 @@ Availiable arguments
 - S → Save all progress
 - C → Clear output
 
-## GUI usage video
+### GUI usage video
 
 [Watch the demo](assets/demo.mov)
 
