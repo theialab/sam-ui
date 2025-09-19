@@ -1,14 +1,20 @@
 # Manual labelling with SAM-2
 
-## Terms of usage
-
-If you use this tool, kindly cite the paper [3D Gaussian Flats: Hybrid 2D/3D Photometric Scene Reconstruction](https://github.com/theialab/3dgs-flats)
 
 <section class="section" id="BibTeX">
   <div class="container is-max-desktop content">
     <h2 class="title">BibTeX</h2>
-    <pre><code> TBA
-   </code></pre>
+    <p>
+      If you use this tool, kindly cite the paper 
+      <a href="https://github.com/theialab/3dgs-flats" target="_blank">
+        3D Gaussian Flats: Hybrid 2D/3D Photometric Scene Reconstruction
+      </a>
+    </p>
+    <pre>
+    <code>
+      TBA
+    </code>
+    </pre>
   </div>
 </section>
 
