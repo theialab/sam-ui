@@ -28,6 +28,8 @@ conda activate sam2
 pip install opencv-python matplotlib scipy
 pip install 'git+https://github.com/facebookresearch/sam2.git'
 pip install huggingface-hub
+
+cd sam-ui
 pip install -e .
 ```
 
