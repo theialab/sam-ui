@@ -8,8 +8,8 @@ The Segment Anything Model v2 (SAM v2) is licensed under the Apache License, Ver
 
 ----
 
-Your Project Name
-Copyright 2025 Maria Taktasheva
+SAM-UI
+Copyright 2025 Maria Taktasheva, Helena Pankov
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
