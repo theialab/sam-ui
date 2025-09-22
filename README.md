@@ -56,7 +56,7 @@ Availiable arguments
 
 ### GUI usage video
 
-[Watch the demo](assets/demo.mov)
+![Usage demo](assets/demo.gif)
 
 - Note that some of the propagation results are inconsistent with actual objects that are prompted, and the error accumulates because of wrong predictions
 - We currently set up the propagation for 16 frames forward, you might experiment with changing that number for the better results
