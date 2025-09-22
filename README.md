@@ -1,4 +1,4 @@
-# Manual labelling with SAM-2
+# SAM-UI: Image labelling with SAM-2 made easy!
 
 
 <section class="section" id="BibTeX">
