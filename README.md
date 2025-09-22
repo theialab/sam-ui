@@ -1,4 +1,4 @@
-# Manual labelling with SAM-2
+# SAM-UI: Image labelling with SAM-2 made easy!
 
 
 <section class="section" id="BibTeX">
@@ -53,10 +53,11 @@ Availiable arguments
 - R → Reset state completely
 - S → Save all progress
 - C → Clear output
+- `0`-`9` → Select object No. 0-9
 
 ### GUI usage video
 
 ![Usage demo](assets/demo.gif)
 
-- Note that some of the propagation results are inconsistent with actual objects that are prompted, and the error accumulates because of wrong predictions
+- Note that some of the propagation results are inconsistent with actual objects that are prompted, and the error accumulates because of wrong predictions, which is a limitation of SAMv2
 - We currently set up the propagation for 16 frames forward, you might experiment with changing that number for the better results
