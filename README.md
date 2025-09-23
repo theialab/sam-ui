@@ -19,7 +19,7 @@
       eprint={2509.16423},
       archivePrefix={arXiv},
       primaryClass={cs.CV},
-      url={https://arxiv.org/abs/2509.16423}, 
+      url={https://arxiv.org/abs/2509.16423},
 }</code>
     </pre>
   </div>
