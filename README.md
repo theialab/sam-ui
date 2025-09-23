@@ -11,13 +11,19 @@
       </a>
     </p>
     <pre>
-    <code>
-      TBA
-    </code>
+<code>
+@misc{3dgsflats,
+      title={3D Gaussian Flats: Hybrid 2D/3D Photometric Scene Reconstruction}, 
+      author={Maria Taktasheva and Lily Goli and Alessandro Fiorini and Zhen and Li and Daniel Rebain and Andrea Tagliasacchi},
+      year={2025},
+      eprint={2509.16423},
+      archivePrefix={arXiv},
+      primaryClass={cs.CV},
+      url={https://arxiv.org/abs/2509.16423}, 
+}</code>
     </pre>
   </div>
 </section>
-
 
 ## Usage
 
