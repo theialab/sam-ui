@@ -5,7 +5,7 @@
   <div class="container is-max-desktop content">
     <h2 class="title">BibTeX</h2>
     <p>
-      If you use this tool, kindly cite the paper 
+      If you use this tool, or any part of its code or methodology, in your research, academic work, or published results, please cite the following paper:
       <a href="https://github.com/theialab/3dgs-flats" target="_blank">
         3D Gaussian Flats: Hybrid 2D/3D Photometric Scene Reconstruction
       </a>
@@ -22,10 +22,16 @@
       url={https://arxiv.org/abs/2509.16423},
 }</code>
     </pre>
+  <p>Proper citation is required to acknowledge the original work and support continued research and development.</p>
   </div>
 </section>
 
+
+
 ## Usage
+
+![Usage demo](assets/demo.gif)
+
 
 ### Environment creation
 ```
@@ -61,9 +67,6 @@ Availiable arguments
 - C → Clear output
 - `0`-`9` → Select object No. 0-9
 
-### GUI usage video
-
-![Usage demo](assets/demo.gif)
-
+### Tips
 - Note that some of the propagation results are inconsistent with actual objects that are prompted, and the error accumulates because of wrong predictions, which is a limitation of SAMv2
 - We currently set up the propagation for 16 frames forward, you might experiment with changing that number for the better results
