@@ -333,7 +333,7 @@ def propagate_all():
         try:
             frame_idx = ui_state.current_frame_idx
 
-            window = 16
+            window = 1500
             total_frames = len(ui_state.frames)
 
             for (
@@ -530,6 +530,8 @@ def run_ui(
                 ord(str(hotkey_idx)), partial(set_object_idx, hotkey_idx)
             )
 
+        register_click(Click(x=1440, y=1440, button=MouseButtons.LEFT))
+
         ui.add_click_handler(remove_current_object_and_frame_clicks_at_xy)
         ui.add_click_handler(register_click)
 
@@ -545,6 +547,81 @@ def run_ui(
 
         shutil.rmtree(temp_frames_path)
 
+def run_headless(
+    jpeg_file_paths: list[Path],
+    temp_frames_path: Path,
+    state: TrackingUIState,
+    click_xy: tuple[int, int] = (1440, 1440),
+):
+    """Headless mode: auto-click center, propagate all frames, save masks."""
+    temp_frames_path.mkdir(exist_ok=True)
+
+    logger.info(
+        f"Resizing {len(jpeg_file_paths)} frames to 512px min dimension -> {temp_frames_path}"
+    )
+
+    state.reset_state()
+
+    for i, path in tqdm(enumerate(jpeg_file_paths), "Copying frames"):
+        image = open_image(path)
+        image = image.resize(target_size_from_min_dimension(image, 512))
+        state.temp_to_original_filenames[f"{i:04d}.jpg"] = path.stem
+        image.save(temp_frames_path / f"{i:04d}.jpg", quality=100)
+
+    sam = SAMState()
+    try:
+        logger.info("Initializing SAM model...")
+        sam.init_state(str(temp_frames_path))
+        logger.info("SAM initialized.")
+
+        logger.info(f"Adding click at ({click_xy[0]}, {click_xy[1]}) on frame 0")
+        _, out_obj_ids, out_mask_logits = sam.add_point(
+            click_xy[0], click_xy[1], frame_idx=0, object_id=0, positive=True
+        )
+        out_masks = postprocess_logits(out_mask_logits).cpu().numpy()
+        for out_obj_id, out_mask in zip(out_obj_ids, out_masks):
+            state.object_masks_by_frame[(out_obj_id, 0)] = out_mask
+
+        state.clicks[0][0].append(
+            Click(x=click_xy[0], y=click_xy[1], button=MouseButtons.LEFT)
+        )
+
+        logger.info("Propagating masks across all frames...")
+        total_frames = len(state.frames or jpeg_file_paths)
+        for out_frame_idx, out_obj_ids, out_mask_logits in propagate_in_whole_video(
+            sam.predictor,
+            sam.state,
+            start_frame_idx=0,
+            window=1500,
+            total_frames=total_frames,
+            reverse=False,
+        ):
+            out_masks = postprocess_logits(out_mask_logits).cpu().numpy()
+            for out_obj_id, out_mask in zip(out_obj_ids, out_masks):
+                state.object_masks_by_frame[(out_obj_id, out_frame_idx)] = out_mask
+
+        logger.info("Saving masks...")
+        output_path = state.output_path
+        os.makedirs(output_path, exist_ok=True)
+        mask_output_path = os.path.join(output_path, "masks")
+        os.makedirs(mask_output_path, exist_ok=True)
+
+        for (object_id, frame_idx), mask in state.object_masks_by_frame.items():
+            if (mask > 0.5).sum() == 0:
+                continue
+            original_file_stem = state.temp_to_original_filenames.get(
+                f"{frame_idx:04d}.jpg"
+            )
+            frame_mask_path = os.path.join(
+                mask_output_path, f"{object_id}", f"{original_file_stem}.png"
+            )
+            os.makedirs(os.path.dirname(frame_mask_path), exist_ok=True)
+            cv2.imwrite(frame_mask_path, (mask * 255).astype(np.uint8))
+
+        logger.info(f"Done. Masks saved to {mask_output_path}")
+    finally:
+        sam.destroy()
+        shutil.rmtree(temp_frames_path, ignore_errors=True)
 
 def main(args):
     frames_path = args.frames_path
@@ -553,7 +630,7 @@ def main(args):
     jpeg_file_paths = [
         path
         for path in frames_path.iterdir()
-        if path.suffix.lower() in [".jpg", ".jpeg"]
+        if path.suffix.lower() in [".jpg", ".jpeg", ".png"]
     ]
     jpeg_file_paths.sort(key=lambda path: path.stem)
 
@@ -562,13 +639,21 @@ def main(args):
 
     state = get_ui_state(TrackingUIState(output_path=args.output_path))
     temp_frames_path = Path(frames_path).parent / "frames_temp"
-    run_ui(
-        jpeg_file_paths,
-        temp_frames_path,
-        state,
-        args.ui_scale,
-    )
 
+    if args.headless:
+        run_headless(
+            jpeg_file_paths,
+            temp_frames_path,
+            state,
+            click_xy=(args.click_x, args.click_y),
+        )
+    else:
+        run_ui(
+            jpeg_file_paths,
+            temp_frames_path,
+            state,
+            args.ui_scale,
+        )
 
 def parse_args():
     parser = argparse.ArgumentParser()
@@ -593,6 +678,19 @@ def parse_args():
         "--clear-output",
         action="store_true",
         help="Clear the output directory before starting",
+    )
+    parser.add_argument(
+        "--headless",
+        action="store_true",
+        help="Run without GUI: auto-click, propagate, and save",
+    )
+    parser.add_argument(
+        "--click-x", type=int, default=1440,
+        help="X coordinate of the initial click (headless mode)",
+    )
+    parser.add_argument(
+        "--click-y", type=int, default=1440,
+        help="Y coordinate of the initial click (headless mode)",
     )
     return parser.parse_args()
 
