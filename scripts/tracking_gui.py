@@ -333,7 +333,7 @@ def propagate_all():
         try:
             frame_idx = ui_state.current_frame_idx
 
-            window = 1500
+            window = 5000
             total_frames = len(ui_state.frames)
 
             for (
@@ -592,7 +592,7 @@ def run_headless(
             sam.predictor,
             sam.state,
             start_frame_idx=0,
-            window=1500,
+            window=5000,
             total_frames=total_frames,
             reverse=False,
         ):
